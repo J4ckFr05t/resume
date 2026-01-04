@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Automated IOC Enrichment Tool",
+    "description": "Built a Python-based IOC enrichment tool integrating VirusTotal, AbuseIPDB, MISP, and OpenCTI to support SOC triage through automated lookup, tagging, and structured export."
+  },
+  {
+    "title": "Threat Hunting \\& Attack Simulation Lab",
+    "description": "Designed an enterprise-style threat hunting lab using Active Directory, Elastic Stack, and Wazuh to simulate MITRE ATT\\&CK techniques and analyze Windows security event logs and endpoint telemetry."
+  },
+  {
+    "title": "Threat Detection Using Machine Learning",
+    "description": "Developed a malware detection prototype using TensorFlow to study anomaly detection, alert behavior, and false positives in SOC monitoring contexts."
+  }
+]
