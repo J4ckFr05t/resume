@@ -1,1 +1,5 @@
 .DS_Store
+# Ignore any file named main with any extension
+main.*
+# But keep main.tex tracked
+!main.tex

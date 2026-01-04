@@ -1,9 +1,14 @@
 require("lualibs.lua")
 
 function getJsonFromFile(file)
-  local fileHandle = io.open(file)
+  local fileHandle = io.open(file, "r")
+  if not fileHandle then
+    -- This provides a helpful error in the log instead of crashing
+    tex.print("\\textbf{Error: Could not open " .. file .. "}")
+    return {}
+  end
   local jsonString = fileHandle:read('*a')
-  fileHandle.close()
+  fileHandle:close() -- Changed . to :
   local jsonData = utilities.json.tolua(jsonString)
   return jsonData
 end
