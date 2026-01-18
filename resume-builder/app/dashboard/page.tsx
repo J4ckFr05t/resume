@@ -8,6 +8,7 @@ import PersonalForm from "@/components/forms/PersonalForm"
 import EducationForm from "@/components/forms/EducationForm"
 import ExperienceForm from "@/components/forms/ExperienceForm"
 import ProjectsForm from "@/components/forms/ProjectsForm"
+import AccountSettings from "@/components/AccountSettings"
 
 // Define types based on JSON structure (approximate)
 type Personal = any
@@ -183,70 +184,63 @@ export default function DashboardPage() {
                     <div className="flex h-16 justify-between">
                         <div className="flex">
                             <div className="flex flex-shrink-0 items-center">
-                                <h1 className="text-xl font-bold text-gray-900">Resume Builder</h1>
+                                <h1 className="text-xl font-bold text-gray-900">Profilio</h1>
                             </div>
                         </div>
-                        <div className="flex items-center">
-                            <span className="mr-4 text-sm text-gray-700">{session?.user?.email}</span>
-
-                            {/* Import Button */}
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleImport}
-                                className="hidden"
-                                accept=".json"
-                                multiple
-                            />
+                        <div className="flex items-center space-x-6">
                             <button
-                                type="button"
-                                onClick={() => setShowInstructions(true)}
-                                className="mr-2 text-gray-400 hover:text-gray-600"
-                                title="Import Instructions"
+                                onClick={() => setActiveTab('account')}
+                                className="text-sm text-gray-500 hidden sm:block hover:text-indigo-600 transition-colors focus:outline-none"
+                                title="Manage Account"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => fileInputRef.current?.click()}
-                                className="mr-4 text-sm font-medium text-gray-500 hover:text-gray-900"
-                            >
-                                Import JSON
+                                {session?.user?.email}
                             </button>
 
-                            <button
-                                onClick={() => signOut({ callbackUrl: "/login" })}
-                                className="mr-4 text-sm font-medium text-gray-500 hover:text-gray-900"
-                            >
-                                Sign out
-                            </button>
-                            <button
-                                onClick={async () => {
-                                    if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-                                        try {
-                                            const res = await fetch("/api/user", { method: "DELETE" })
-                                            if (res.ok) {
-                                                signOut({ callbackUrl: "/" })
-                                            } else {
-                                                alert("Failed to delete account")
-                                            }
-                                        } catch (e) {
-                                            console.error(e)
-                                            alert("Error deleting account")
-                                        }
-                                    }
-                                }}
-                                className="mr-4 text-sm font-medium text-red-600 hover:text-red-800"
-                            >
-                                Delete Account
-                            </button>
-                            <button
-                                onClick={() => setShowJobModal(true)}
-                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
-                            >
-                                Generate PDF
-                            </button>
+                            <div className="flex items-center space-x-4">
+                                {/* Import Actions */}
+                                <div className="flex items-center text-sm font-medium text-gray-600 space-x-1">
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        onChange={handleImport}
+                                        className="hidden"
+                                        accept=".json"
+                                        multiple
+                                    />
+                                    <button
+                                        onClick={() => setShowInstructions(true)}
+                                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                                        title="Import Guide"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="hover:text-gray-900 transition-colors"
+                                    >
+                                        Import Data
+                                    </button>
+                                </div>
+
+                                <div className="h-4 w-px bg-gray-300 mx-2"></div>
+
+                                {/* Account Actions */}
+                                <button
+                                    onClick={() => signOut({ callbackUrl: "/login" })}
+                                    className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                                >
+                                    Sign out
+                                </button>
+
+                                <button
+                                    onClick={() => setShowJobModal(true)}
+                                    className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                >
+                                    Generate PDF
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -256,31 +250,39 @@ export default function DashboardPage() {
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="md:flex md:gap-6">
                         {/* Sidebar / Tabs */}
-                        <div className="w-full md:w-1/4 mb-6 md:mb-0">
-                            <div className="bg-white shadow rounded-lg overflow-hidden">
+                        <div className="w-full md:w-64 mb-6 md:mb-0 flex-shrink-0">
+                            <nav className="flex flex-col space-y-1">
                                 {['personal', 'experience', 'education', 'projects'].map(tab => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
-                                        className={`w-full text-left px-4 py-3 border-b last:border-0 capitaliz ${activeTab === tab ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                                        className={`
+                                            w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 capitalize
+                                            ${activeTab === tab
+                                                ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-gray-200'
+                                                : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200/50'
+                                            }
+                                        `}
                                     >
                                         {tab}
                                     </button>
                                 ))}
-                            </div>
+                            </nav>
                         </div>
 
                         {/* Editor Area */}
-                        <div className="w-full md:w-3/4">
+                        <div className="flex-1 min-w-0">
                             <div className="bg-white shadow rounded-lg p-6">
                                 <div className="flex justify-between mb-4">
                                     <h2 className="text-lg font-medium capitalize text-gray-900">{activeTab} Details</h2>
-                                    <button onClick={() => handleSave()} disabled={saving} className="text-sm text-indigo-600 hover:text-indigo-500">
+                                    <button onClick={() => handleSave()} disabled={saving} className={`text-sm text-indigo-600 hover:text-indigo-500 font-medium ${activeTab === 'account' ? 'hidden' : ''}`}>
                                         {saving ? "Saving..." : "Save Changes"}
                                     </button>
                                 </div>
 
-                                {/* Render active form here - placeholder for now */}
+                                {/* Render active form here */}
+                                {activeTab === "account" && <AccountSettings />}
+
                                 {activeTab === "personal" && (
                                     <PersonalForm
                                         data={resumeData.personal}
@@ -356,44 +358,143 @@ export default function DashboardPage() {
             )}
             {/* Import Instructions Modal */}
             {showInstructions && (
-                <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onClick={() => setShowInstructions(false)}></div>
-                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                <div className="sm:flex sm:items-start">
-                                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                        <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                            JSON Import Instructions
-                                        </h3>
-                                        <div className="mt-2">
-                                            <p className="text-sm text-gray-500 mb-4">
-                                                You can upload one or multiple JSON files to populate your resume. Files must match the specific filenames below:
-                                            </p>
-                                            <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
-                                                <li><strong>personal.json</strong>: Personal details (Name, Email, Skills, etc.)</li>
-                                                <li><strong>edu.json</strong>: Education history</li>
-                                                <li><strong>exp.json</strong>: Work experience</li>
-                                                <li><strong>proj.json</strong>: Projects</li>
-                                            </ul>
-                                            <p className="text-sm text-gray-500 mt-4">
-                                                <strong>Note:</strong> Uploading will overwrite existing data for that section.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-500 bg-opacity-75 backdrop-blur-sm">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+                        {/* Header */}
+                        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                            <div>
+                                <h3 className="text-lg font-bold text-gray-900">
+                                    Data Import Instructions
+                                </h3>
+                                <p className="text-sm text-gray-500 mt-1">
+                                    Upload JSON files to populate your resume sections.
+                                </p>
                             </div>
-                            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                <button
-                                    type="button"
-                                    className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
-                                    onClick={() => setShowInstructions(false)}
-                                >
-                                    Close
-                                </button>
-                            </div>
+                            <button
+                                onClick={() => setShowInstructions(false)}
+                                className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-200"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
+
+                        {/* Scrollable Content */}
+                        <div className="p-6 overflow-y-auto space-y-4">
+                            <div className="text-sm text-amber-600 bg-amber-50 border border-amber-200 p-3 rounded-md flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                                <span>Note: Importing will overwrite the existing data for that specific section.</span>
+                            </div>
+
+                            {/* Personal */}
+                            <details className="group border border-gray-200 rounded-lg bg-gray-50 open:bg-white open:ring-1 open:ring-indigo-500 transition-all">
+                                <summary className="flex items-center justify-between cursor-pointer p-4 font-medium text-gray-900 list-none select-none">
+                                    <div className="flex items-center space-x-3">
+                                        <span className="font-mono bg-indigo-100 text-indigo-700 px-2 py-1 rounded text-xs font-bold border border-indigo-200">personal.json</span>
+                                        <span className="text-gray-600 text-sm">Personal Details & Skills</span>
+                                    </div>
+                                    <span className="transform group-open:rotate-180 transition-transform text-gray-400">
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                    </span>
+                                </summary>
+                                <div className="px-4 pb-4">
+                                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto text-xs font-mono leading-relaxed border border-gray-700 shadow-inner">
+                                        {`{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "555-0123",
+  "github": "github.com/johndoe",
+  "linkedin": "linkedin.com/in/johndoe",
+  "skills": "React, TypeScript, Node.js"
+}`}
+                                    </pre>
+                                </div>
+                            </details>
+
+                            {/* Education */}
+                            <details className="group border border-gray-200 rounded-lg bg-gray-50 open:bg-white open:ring-1 open:ring-indigo-500 transition-all">
+                                <summary className="flex items-center justify-between cursor-pointer p-4 font-medium text-gray-900 list-none select-none">
+                                    <div className="flex items-center space-x-3">
+                                        <span className="font-mono bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-200">edu.json</span>
+                                        <span className="text-gray-600 text-sm">Education History</span>
+                                    </div>
+                                    <span className="transform group-open:rotate-180 transition-transform text-gray-400">
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                    </span>
+                                </summary>
+                                <div className="px-4 pb-4">
+                                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto text-xs font-mono leading-relaxed border border-gray-700 shadow-inner">
+                                        {`[
+  {
+    "institution": "University of Tech",
+    "location": "City, State",
+    "degree": "BS Computer Science",
+    "dates": "2018 - 2022",
+    "cgpa": "3.8"
+  }
+]`}
+                                    </pre>
+                                </div>
+                            </details>
+
+                            {/* Experience */}
+                            <details className="group border border-gray-200 rounded-lg bg-gray-50 open:bg-white open:ring-1 open:ring-indigo-500 transition-all">
+                                <summary className="flex items-center justify-between cursor-pointer p-4 font-medium text-gray-900 list-none select-none">
+                                    <div className="flex items-center space-x-3">
+                                        <span className="font-mono bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold border border-purple-200">exp.json</span>
+                                        <span className="text-gray-600 text-sm">Work Experience</span>
+                                    </div>
+                                    <span className="transform group-open:rotate-180 transition-transform text-gray-400">
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                    </span>
+                                </summary>
+                                <div className="px-4 pb-4">
+                                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto text-xs font-mono leading-relaxed border border-gray-700 shadow-inner">
+                                        {`[
+  {
+    "company": "Tech Corp",
+    "location": "San Francisco, CA",
+    "role": "Software Engineer",
+    "time_duration": "2022 - Present",
+    "details": [
+      { "description": "Developed React application..." }
+    ]
+  }
+]`}
+                                    </pre>
+                                </div>
+                            </details>
+
+                            {/* Projects */}
+                            <details className="group border border-gray-200 rounded-lg bg-gray-50 open:bg-white open:ring-1 open:ring-indigo-500 transition-all">
+                                <summary className="flex items-center justify-between cursor-pointer p-4 font-medium text-gray-900 list-none select-none">
+                                    <div className="flex items-center space-x-3">
+                                        <span className="font-mono bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold border border-green-200">proj.json</span>
+                                        <span className="text-gray-600 text-sm">Projects</span>
+                                    </div>
+                                    <span className="transform group-open:rotate-180 transition-transform text-gray-400">
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                    </span>
+                                </summary>
+                                <div className="px-4 pb-4">
+                                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto text-xs font-mono leading-relaxed border border-gray-700 shadow-inner">
+                                        {`[
+  {
+    "name": "Profilio",
+    "technologies": "Next.js, LaTeX",
+    "dates": "2023",
+    "description": "Automated resume generator..."
+  }
+]`}
+                                    </pre>
+                                </div>
+                            </details>
+                        </div>
+
+
                     </div>
                 </div>
             )}
