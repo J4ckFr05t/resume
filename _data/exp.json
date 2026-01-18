@@ -8,27 +8,27 @@
     "details": [
       {
         "title": "Detection Engineering \\& Investigation Enablement",
-        "description": "Developed 30+ detection, investigation, and reporting use cases using Splunk and SQL to support SOC analysts with improved alert clarity and actionable security insights."
+        "description": "Developed 30+ detection, investigation, and reporting use cases using Splunk and SQL to support SOC analysts with improved alert clarity and investigation context."
       },
       {
         "title": "Security Telemetry Correlation",
-        "description": "Unified and normalized endpoint, vulnerability, and cloud security telemetry from Wiz, CrowdStrike, Qualys, Tenable, Tanium, and Rapid7 across 5+ environments to support threat detection and analysis workflows."
+        "description": "Unified and normalized endpoint, vulnerability, and cloud security telemetry from Wiz, CrowdStrike, Qualys, Tenable, Tanium, and Rapid7 across multiple environments to support SOC investigations."
       },
       {
         "title": "Security Data Processing Pipelines",
-        "description": "Built fault-tolerant Python and SQL-based pipelines to ingest, enrich, and structure ~1TB/month of security telemetry used for detection logic, investigation context, and analytics."
+        "description": "Built fault-tolerant Python and SQL-based pipelines to ingest, enrich, and structure ~1TB/month of security telemetry used for detection logic and investigation workflows."
       },
       {
         "title": "SOC \\& Onboarding Support",
-        "description": "Supported SOC and onboarding teams by troubleshooting ingestion, parsing, and schema issues, ensuring high-quality telemetry availability for downstream investigations."
+        "description": "Supported SOC and onboarding teams by troubleshooting ingestion, parsing, and schema issues, ensuring consistent and high-quality telemetry availability."
       },
       {
         "title": "Detection Tuning \\& Alert Quality Improvement",
-        "description": "Collaborated with SOC teams to validate alerts, reduce false positives by 15\\%, and improve detection efficiency by enhancing enrichment logic and correlation rules."
+        "description": "Collaborated with SOC teams to validate alerts and improve alert quality by refining enrichment and correlation logic, reducing false positives by 15\\%."
       },
       {
         "title": "Recognition",
-        "description": "Received the Ka PAI Award for delivering reliable and scalable security data workflows that improved detection readiness and analyst efficiency."
+        "description": "Received the Ka PAI Award for delivering reliable and scalable security data workflows that improved SOC detection readiness."
       }
     ]
   },
@@ -41,27 +41,27 @@
     "details": [
       {
         "title": "Detection Use Case Development",
-        "description": "Developed 20+ security detection and analytics use cases to support SOC operations and improve visibility into suspicious activity across client environments."
+        "description": "Developed 20+ security detection and analytics use cases to support SOC monitoring and investigation workflows."
       },
       {
         "title": "Multi-Source Telemetry Analysis",
-        "description": "Onboarded and correlated data from EDR, vulnerability management, cloud, and identity sources to support alert generation and investigation workflows."
+        "description": "Onboarded and correlated telemetry from EDR, vulnerability management, cloud, and identity security tools to support alert generation and analysis."
       },
       {
         "title": "Security Tool Integrations",
-        "description": "Delivered REST API integrations for security platforms such as CrowdStrike, Tenable, and Tanium, ensuring reliable data ingestion for SOC monitoring and analysis."
+        "description": "Delivered REST API integrations for security platforms such as CrowdStrike, Tenable, and Tanium, ensuring reliable and consistent data ingestion."
       },
       {
         "title": "Data Enrichment \\& Contextual Support",
-        "description": "Implemented enrichment logic adding asset, location, and business context to alerts, enabling faster triage and improved investigation decision-making."
+        "description": "Implemented enrichment logic to add asset, location, and business context to alerts, enabling faster triage and investigation."
       },
       {
         "title": "Alert Noise Reduction",
-        "description": "Improved alert signal quality by implementing deduplication, correlation, and suppression logic, reducing false positives by 12\\% across multiple pipelines."
+        "description": "Improved alert signal quality by implementing deduplication, correlation, and suppression logic, reducing false positives by 12\\%."
       },
       {
         "title": "Operational Reliability",
-        "description": "Recognized for consistent delivery and reliability in maintaining telemetry quality and detection readiness for SOC teams."
+        "description": "Maintained high telemetry quality and detection readiness through consistent monitoring, validation, and issue resolution."
       }
     ]
   }

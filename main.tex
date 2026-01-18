@@ -14,7 +14,14 @@
 \usepackage{verbatim}
 \usepackage{enumitem}
 \usepackage{fancyhdr}
-\usepackage{ebgaramond}
+
+% --- FONT FIX START ---
+% REMOVED: \usepackage[urw-garamond]{mathdesign} 
+% ADDED: Modern font handling for LuaLaTeX
+\usepackage{fontspec}
+\setmainfont{EB Garamond} % or use "TeX Gyre Termes" for Times New Roman
+% --- FONT FIX END ---
+
 \RequirePackage{luatex85}
 \usepackage{pdfcomment}
 \usepackage{luacode}
@@ -64,7 +71,7 @@
   \vspace{-1pt}\item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
-      \textit{#3 $\cdot$ #4} & \textit{#5} \\
+      \textit{#3} & \textit{#4} \\
     \end{tabular*}\vspace{-5pt}
 }
 
@@ -91,21 +98,22 @@ require("lua/parser.lua")
 
 % Print Summary
 %-------------------------------------------
-\section{Proffesional Summary}
-Security Analyst with 3+ years of experience supporting SOC and MDR operations through detection engineering, telemetry analysis, and investigation enablement. Hands-on experience in building and tuning detections, correlating multi-source security data, and improving alert quality to support analyst investigations. Strong foundation in endpoint and vulnerability telemetry, SIEM querying (SQL/Splunk), and threat intelligence enrichment. Actively building hands-on expertise in Windows security event analysis, MITRE ATT\&CK aligned detection logic, and incident response workflows through lab-based simulations and detection testing.
+% TYPO FIXED: "Proffesional" -> "Professional"
+\section{Professional Summary}
+Security Analyst with 3+ years of experience supporting \textbf{MDR and SOC operations through detection engineering and security data enablement}. Specialized in onboarding, normalizing, and enriching security telemetry to improve alert quality and investigation readiness for SOC analysts. Strong experience in SIEM querying (Splunk, SQL), security data pipelines, and alert fidelity improvement. Actively building hands-on threat investigation skills through labs and attack simulations.
 
 % Print Experience
 %-------------------------------------------
 \section{Experience}
   \resumeSubHeadingListStart
-  	\directlua{printExpItems("_data/exp.json")}
+    \directlua{printExpItems("_data/exp.json")}
   \resumeSubHeadingListEnd
   
 % Print Education
 %-------------------------------------------
 \section{Education}
   \resumeSubHeadingListStart
-	\directlua{printEduItems("_data/edu.json")}
+    \directlua{printEduItems("_data/edu.json")}
   \resumeSubHeadingListEnd
   
 % Print Projects

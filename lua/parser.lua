@@ -1,21 +1,26 @@
-require("lualibs.lua")
+require("lualibs") 
 
 function getJsonFromFile(file)
-  local fileHandle = io.open(file, "r")
+  local fileHandle = io.open(file)
+  
+  -- Safety check: if file doesn't exist, return empty table to prevent crash
   if not fileHandle then
-    -- This provides a helpful error in the log instead of crashing
-    tex.print("\\textbf{Error: Could not open " .. file .. "}")
-    return {}
+      return {} 
   end
+  
   local jsonString = fileHandle:read('*a')
-  fileHandle:close() -- Changed . to :
+  
+  -- FIX: Use colon (:) syntax for file operations
+  fileHandle:close()
+  
   local jsonData = utilities.json.tolua(jsonString)
   return jsonData
 end
 
 function printEduItems(file)
   local json = getJsonFromFile(file)
-  for key, value in pairs(json) do
+  -- FIX: Use ipairs() to keep Education items in the correct order
+  for i, value in ipairs(json) do
     tex.print("\\resumeEduEntry")
     tex.print("{" .. value["school"] .. "}")
     tex.print("{" .. value["school_location"] .. "}")
@@ -26,7 +31,8 @@ end
 
 function printExpItems(file)
   local json = getJsonFromFile(file)
-  for key, value in pairs(json) do
+  -- FIX: Use ipairs() to keep Experience items in the correct order
+  for i, value in ipairs(json) do
     tex.print("\\resumeExpEntry")
     tex.print("{" .. value["company"] .. "}")
     tex.print("{" .. value["company_location"] .. "}")
@@ -35,10 +41,11 @@ function printExpItems(file)
     tex.print("{" .. value["time_duration"] .. "}")
 
     tex.print("\\resumeItemListStart")
-    for key, value in pairs(value["details"]) do
+    -- Details list must also be ordered
+    for j, detail in ipairs(value["details"]) do
       tex.print("\\resumeItem")
-      tex.print("{" .. value["title"] .. "}")
-      tex.print("{" .. value["description"] .. "}")
+      tex.print("{" .. detail["title"] .. "}")
+      tex.print("{" .. detail["description"] .. "}")
     end
     tex.print("\\resumeItemListEnd")
   end
@@ -46,7 +53,7 @@ end
 
 function printProjItems(file)
   local json = getJsonFromFile(file)
-  for key, value in pairs(json) do
+  for i, value in ipairs(json) do
     tex.print("\\resumeSubItem")
     tex.print("{" .. value["title"] .. "}")
     tex.print("{" .. value["description"] .. "}")
@@ -55,7 +62,7 @@ end
 
 function printCertItems(file)
   local json = getJsonFromFile(file)
-  for key, value in pairs(json) do
+  for i, value in ipairs(json) do
     tex.print("\\resumeSubItem")
     tex.print("{" .. value["name"] .. ", " .. value["issuer"] .. "}")
     tex.print("{" .. value["year"] .. "}")
@@ -64,7 +71,7 @@ end
 
 function printAchieveItems(file)
   local json = getJsonFromFile(file)
-  for key, value in pairs(json) do
+  for i, value in ipairs(json) do
     tex.print("\\resumeSubItem")
     tex.print("{" .. value["title"] .. "}")
     tex.print("{}")
@@ -73,7 +80,8 @@ end
 
 function printHeading(file)
   local json = getJsonFromFile(file)
-  for key, value in pairs(json) do
+  -- Headings are usually single items, so ipairs is safe here too
+  for i, value in ipairs(json) do
     tex.print("\\begin{tabular*}{\\textwidth}{l@{\\extracolsep{\\fill}}r}")
 
     tex.print("\\textbf{\\href")
@@ -95,14 +103,19 @@ end
 function printList(file, primary, secondary)
   local json = getJsonFromFile(file)
   local first = true
-  for key, value in pairs(json) do
-    for key, value in pairs(value[primary]) do
-      if (first) then
-        tex.print(value[secondary])
-        first = false
-      else
-        tex.print(", " .. value[secondary])
+  
+  -- Assuming the structure is a list of objects
+  for i, outerValue in ipairs(json) do
+      -- Check if primary key exists and is a table
+      if outerValue[primary] then
+        for j, innerValue in ipairs(outerValue[primary]) do
+          if (first) then
+            tex.print(innerValue[secondary])
+            first = false
+          else
+            tex.print(", " .. innerValue[secondary])
+          end
+        end
       end
-    end
   end
 end
