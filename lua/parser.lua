@@ -24,7 +24,11 @@ function printEduItems(file)
     tex.print("\\resumeEduEntry")
     tex.print("{" .. value["school"] .. "}")
     tex.print("{" .. value["school_location"] .. "}")
-    tex.print("{" .. value["degree"] .. "}")
+    if value["cgpa"] and value["cgpa"] ~= "" then
+      tex.print("{" .. value["degree"] .. "; CGPA: " .. value["cgpa"] .. "}")
+    else
+      tex.print("{" .. value["degree"] .. "}")
+    end
     tex.print("{" .. value["time_period"] .. "}")
   end
 end
