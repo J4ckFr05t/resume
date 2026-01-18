@@ -3,6 +3,7 @@
     "name": "Jibin George",
     "website": "jibingeorge.org",
     "email": "jibingeorge.mg@gmail.com",
+    "summary": "Security Analyst with 3+ years of experience supporting \\textbf{MDR and SOC operations through detection engineering and security data enablement}. Specialized in onboarding, normalizing, and enriching security telemetry to improve alert quality and investigation readiness for SOC analysts. Strong experience in SIEM querying (Splunk, SQL), security data pipelines, and alert fidelity improvement. Actively building hands-on threat investigation skills through labs and attack simulations.",
     "phone": "+91 6282399619",
     "linkedin": "https://www.linkedin.com/in/jibin-george-mg",
     "security_operations": [

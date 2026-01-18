@@ -19,7 +19,7 @@ compile:
 
 clean:
 	# Removes intermediate files but keeps the PDF
-	rm -f *.aux *.log *.out *.fls *.fdb_latexmk
+	rm -f *.aux *.log *.out *.fls *.fdb_latexmk *.upa *.upb
 
 pristine: clean
 	# Removes everything including the PDF

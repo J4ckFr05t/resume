@@ -119,3 +119,12 @@ function printList(file, primary, secondary)
       end
   end
 end
+
+function printSummary(file)
+  local json = getJsonFromFile(file)
+  for i, value in ipairs(json) do
+    if value["summary"] then
+      tex.print(value["summary"])
+    end
+  end
+end
