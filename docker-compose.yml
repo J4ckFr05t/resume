@@ -1,0 +1,21 @@
+
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: profilio-app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL="file:/app/db/dev.db" # Use a volume path
+      - NEXTAUTH_URL="http://localhost:3000"
+      - NEXTAUTH_SECRET="change_me_in_production_random_string_123"
+      - IS_CONTAINERIZED=true
+    volumes:
+      - sqlite_data:/app/db
+
+volumes:
+  sqlite_data:

@@ -10,9 +10,13 @@ import util from 'util'
 
 const execPromise = util.promisify(exec)
 
-// Configure paths - ADAPT THESE IF DEPLOYED ELSEWHERE
-const ORIGINAL_RESUME_PATH = '/Users/jibingeorge/Documents/Resumes'
-const DOCKER_IMAGE_NAME = 'resume-builder' // Assumed to be built already or we could build it
+// Configure paths
+const IS_CONTAINERIZED = process.env.IS_CONTAINERIZED === 'true'
+// Logic: If in container, we expect 'tex' folder at equal level to app, or mounted. 
+// Locally: process.cwd() is .../resume-builder. Parent is .../Resumes.
+// In Docker: We will structure it similarly: /app/resume-builder and /app/tex.
+const ORIGINAL_RESUME_PATH = process.env.RESUME_ASSETS_PATH || path.join(process.cwd(), '..')
+const DOCKER_IMAGE_NAME = 'resume-builder'
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions)
@@ -42,10 +46,8 @@ export async function POST(req: Request) {
 
         // 3. Copy Assets (main.tex, lua/, etc)
         // We only copy what's needed to build
-        await fs.copy(path.join(ORIGINAL_RESUME_PATH, 'main.tex'), path.join(tempDir, 'main.tex'))
-        await fs.copy(path.join(ORIGINAL_RESUME_PATH, 'lua'), path.join(tempDir, 'lua'))
-        // We don't strictly need Dockerfile/Makefile inside the temp dir if we rely on the pre-built image,
-        // but the Lua parser logic runs inside the container.
+        await fs.copy(path.join(ORIGINAL_RESUME_PATH, 'tex', 'main.tex'), path.join(tempDir, 'main.tex'))
+        await fs.copy(path.join(ORIGINAL_RESUME_PATH, 'tex', 'lua'), path.join(tempDir, 'lua'))
         // Ensure _data directory exists
         await fs.ensureDir(path.join(tempDir, '_data'))
 
@@ -59,25 +61,29 @@ export async function POST(req: Request) {
 
         // Write transient job description
         if (jobDescription) {
-            // Wrap in an object or array as appropriate, assuming generic usage
             await fs.writeFile(path.join(tempDir, '_data', 'job_description.json'), JSON.stringify({ description: jobDescription }))
         }
 
-        // 5. Run Docker Build
-        // Mounting tempDir to /data in the container
-        // Using the same command logic as the original Makefile/Dockerfile: lualatex ...
-        const dockerCmd = `docker run --rm -v "${tempDir}:/data" ${DOCKER_IMAGE_NAME} lualatex -interaction=nonstopmode -shell-escape main.tex`
+        // 5. Run Build Command
+        console.log(`Starting build ${buildId}... (Containerized: ${IS_CONTAINERIZED})`)
 
-        console.log(`Starting build ${buildId}...`)
+        let buildCmd: string
+        if (IS_CONTAINERIZED) {
+            // Run lualatex directly in the temp dir
+            buildCmd = `cd "${tempDir}" && lualatex -interaction=nonstopmode -shell-escape main.tex`
+        } else {
+            // Run Docker container (DooD / standard local dev)
+            buildCmd = `docker run --rm -v "${tempDir}:/data" ${DOCKER_IMAGE_NAME} lualatex -interaction=nonstopmode -shell-escape main.tex`
+        }
+
         try {
-            const { stdout, stderr } = await execPromise(dockerCmd)
+            const { stdout, stderr } = await execPromise(buildCmd)
             console.log(`Build ${buildId} completed.`)
-            // console.log('Docker Output:', stdout) // Optional: create too much noise
         } catch (execError: any) {
             console.error(`Build ${buildId} FAILED.`)
-            console.error('Docker Stdout:', execError.stdout)
-            console.error('Docker Stderr:', execError.stderr)
-            throw new Error(`Docker build failed: ${execError.stderr || execError.message}`)
+            console.error('Stdout:', execError.stdout)
+            console.error('Stderr:', execError.stderr)
+            throw new Error(`Build failed: ${execError.stderr || execError.message}`)
         }
 
         // 6. Read Generated PDF
